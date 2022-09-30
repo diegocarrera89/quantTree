@@ -1,0 +1,4 @@
+setuptools~=57.0.0
+numpy~=1.23.3
+scikit-learn~=1.1.2
+scipy~=1.9.1
