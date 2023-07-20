@@ -1,3 +1,6 @@
 from quanttree.quanttree_src import QuantTree, QuantTreeThresholdStrategy
 from quanttree.qtewma_src import QT_EWMA
 from quanttree.cdm_src import CDM_QT_EWMA
+from quanttree.kqt_euclidean import EuclideanKernelQuantTree
+from quanttree.kqt_mahalanobis import MahalanobisKernelQuantTree
+from quanttree.kqt_weighted_mahalanobis import WeightedMahalanobisKernelQuantTree

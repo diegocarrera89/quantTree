@@ -1,9 +1,10 @@
 import os
 import pickle
-from typing import Union, List
+import warnings
+from typing import Union
 
 import numpy as np
-from numpy.random import dirichlet, multinomial
+from numpy.random import dirichlet
 from scipy.stats import mvn
 
 from quanttree.core import Partitioning, reshape_data, ThresholdStrategy, Histogram
@@ -212,7 +213,7 @@ class QuantTreeUnivariatePartitioning(QuantTreePartitioning):
 
 class QuantTreeThresholdStrategy(ThresholdStrategy):
     def __init__(self, nu: int = 0, ndata_training: int = 0, pi_values: Union[int, np.ndarray] = 2,
-                 statistic_name: str = 'pearson'):
+                 nbatch=100000, statistic_name: str = 'pearson'):
         super().__init__()
         self.N = ndata_training
         self.nu = nu
@@ -230,6 +231,8 @@ class QuantTreeThresholdStrategy(ThresholdStrategy):
                 self.is_unif = True
             else:
                 self.is_unif = False
+
+        self.nbatch = nbatch
         self.thresholds_path = os.path.join(pkg_folder(), "thresholds", "quanttree_thresholds", "all_distr_quanttree.pkl")
         if not os.path.exists(self.thresholds_path):
             raise FileNotFoundError(f"Cannot find QuantTree thresholds file {self.thresholds_path}.")
@@ -240,16 +243,48 @@ class QuantTreeThresholdStrategy(ThresholdStrategy):
                 all_thresholds = pickle.load(f)
             tkey = (self.statistic_name, self.K, self.N, self.nu)
             if tkey not in all_thresholds:
-                raise ValueError(
-                    "Thresholds for this setting not found. See README.md at https://github.com/diegocarrera89/quantTree for more info.")
+                print("[WARNING] Thresholds for this setting not found. Computing new thresholds...")
+                warnings.warn("Contact diego.stucchi@polimi.it or giacomo.boracchi@polimi.it for an optimized version of the threshold computation.")
+                return self.compute_threshold(alpha=alpha)
             else:
                 thresholds, ecdf = all_thresholds[tkey]
                 return thresholds[np.sum(ecdf <= 1 - alpha)]
         else:
-            raise ValueError("Thresholds are pre-computed only for uniform bin probabilities. See README.md at https://github.com/diegocarrera89/quantTree for more info.")
+            warnings.warn(
+                "Thresholds are pre-computed only for uniform bin probabilities. See README.md at https://github.com/diegocarrera89/quantTree for more info.")
+            warnings.warn(
+                "Contact diego.stucchi@polimi.it or giacomo.boracchi@polimi.it for an optimized version of the threshold computation.")
+            return self.compute_threshold(alpha=alpha)
 
     def add_threshold(self):
         raise NotImplementedError("Threshold computation not implemented. See README.md at https://github.com/diegocarrera89/quantTree for more info.")
+
+    def estimate_quanttree_sim(self):
+        partitioning = QuantTreeUnivariatePartitioning(self.pi_values)
+        y = self.pi_values * self.nu
+
+        stats = np.zeros(self.nbatch)
+        for i_batch in range(self.nbatch):
+            data = np.random.uniform(0, 1, self.N)
+            batch = np.random.uniform(0, 1, self.nu)
+
+            partitioning.build_partitioning(data)
+            y_hat = partitioning.get_bin_counts(batch)
+
+            if self.statistic_name == 'pearson':
+                stats[i_batch] = np.sum(np.abs(y - y_hat) ** 2 / y)
+            elif self.statistic_name == 'tv':
+                stats[i_batch] = 0.5 * np.sum(np.abs(y - y_hat))
+            else:
+                ValueError('Statistic not supported')
+
+        return stats
+
+    def compute_threshold(self, alpha: float):
+        stats = self.estimate_quanttree_sim()
+        thresholds = np.unique(stats)
+        ecdf = np.array([np.sum(stats <= cstat) / stats.shape[0] for cstat in thresholds])
+        return thresholds[np.sum(ecdf <= 1-alpha)]
 
 
 class QuantTree(Histogram):

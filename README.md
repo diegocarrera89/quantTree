@@ -5,7 +5,7 @@ This repository contains the Python implementation of QuantTree \[[Boracchi et a
 Python 3 with the packages in [requirements.txt](requirements.txt)
 
 # Install
-1. Clone the repository on your machine
+1. Clone the repository
 2. Run `pip install -e path/to/quanttree`
 
 # Brief description
@@ -61,6 +61,12 @@ CDM is implemented in `quanttree/cdm_src.py` in a class called `CDM_QT_EWMA`. We
 
 We remark that the control of the ARL0 holds for any CDM defined by any online change-detection algorithm that can be configured to yield the desired ARL0 by setting a constant false alarm probability over time (see Proposition 1 in \[[Stucchi et al. 2022](#stucchi-et-al-2022)\]). This means that, in principle, we can define CDM using other change-detection tests. However, to the best of our knowledge, QT-EWMA is the only nonparametric and online change-detection test for multivariate datastreams where the ARL0 is controlled by setting a constant false alarm probability.
 
+## Kernel QuantTree
+Coming soon.
+
+## MultiModal QuantTree
+Coming soon.
+
 # Thresholds Computation
 The theoretical properties of QuantTree enable an efficient monitoring where detection thresholds are independent of the stationary distribution, and can be pre-computed via Monte Carlo simulations, as detailed in the papers reported in the [References](#references). Here, we provide pre-computed thresholds for the settings addressed in the experimental sections of the works involving QuantTree and its extensions. For any question about thresholds, see [Contacts](#contacts)
 
@@ -76,16 +82,20 @@ See [LICENSE.pdf](LICENSE.pdf) for the complete terms and conditions.
 
 ###### [Boracchi et al. 2018] 
 _"QuantTree: Histograms for Change Detection in Multivariate Data Streams"_  
-G. Boracchi, D. Carrera, C. Cervellera, D. Macciò, International Conference on Machine Learning (ICML) 2018.
+G. Boracchi, D. Carrera, C. Cervellera, D. Macciò. International Conference on Machine Learning (ICML) 2018.
 
 ###### [Frittoli et al. 2021]
 _"Change Detection in Multivariate Datastreams Controlling False Alarms"_  
-L. Frittoli, D. Carrera, G. Boracchi, Joint European Conference on Machine Learning and Knowledge Discovery in Databases 2021.
+L. Frittoli, D. Carrera, G. Boracchi. Joint European Conference on Machine Learning and Knowledge Discovery in Databases 2021.
 
 ###### [Frittoli et al. 2022]
 _"Nonparametric and Online Change Detection in Multivariate Datastreams using QuantTree"_  
-L. Frittoli, D. Carrera, G. Boracchi, IEEE Transactions on Knowledge and Data Engineering 2022.
+L. Frittoli, D. Carrera, G. Boracchi. IEEE Transactions on Knowledge and Data Engineering 2022.
 
 ###### [Stucchi et al. 2022]
 _"Class Distribution Monitoring for Concept Drift Detection"_  
-D. Stucchi, L. Frittoli, G. Boracchi, IEEE-INNS International Joint Conference on Neural Networks (IJCNN) 2022.
+D. Stucchi, L. Frittoli, G. Boracchi. IEEE-INNS International Joint Conference on Neural Networks (IJCNN) 2022.
+
+###### [Stucchi et al. 2023]
+_"Kernel QuantTree"_
+D. Stucchi, P. Rizzo, N. Folloni, G. Boracchi. International Conference on Machine Learning (ICML) 2023.

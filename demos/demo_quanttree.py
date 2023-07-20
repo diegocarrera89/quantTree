@@ -63,7 +63,6 @@ if __name__ == '__main__':
     nu = 64                         # number of samples in each batch
     alpha = 0.05                    # target False Positive Rate
     statistic_name = 'pearson'      # chosen statistic ('pearson' or 'tv')
-    threshold_method = 'dirichlet'  # employed threshold strategy
 
     target_sKL = 1                  # symmetric Kullback-Leibler distance between the distributions
     nbatches = 5000                 # Number of batches for testing

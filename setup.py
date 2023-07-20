@@ -1,32 +1,14 @@
 import setuptools
-import os
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-# data_files = []
-# roots = ['quanttree/thresholds', 'demos', 'testing']
-# for root in roots:
-#     for path, subdirs, files in os.walk(root):
-#         if not len(files) == 0:
-#             data_files.append((path, files))
-
-# for element in data_files:
-#     print(element[0])
-#     for subelem in element[1]:
-#         print(f"    {subelem}")
-#
-# exit(0)
-
 setuptools.setup(
     name="quanttree",
-    version="0.0.3",
+    version="0.0.4",
     description="Implementation of the QuantTree algorithm and extensions.",
-    license_file="LICENSE.pdf",
+    license="LICENSE.pdf",
     package_dir={"": "."},
-    packages=['quanttree'],
-    # data_files=data_files,
-    # packages=setuptools.find_packages(where="."),
     author="Stucchi Diego",
     author_email="stucchidiego1994@gmail.com",
     long_description=long_description,
@@ -42,5 +24,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
         "Topic :: Scientific/Engineering"
     ],
+    packages=setuptools.find_packages(where="."),
     python_requires=">=3.6",
 )

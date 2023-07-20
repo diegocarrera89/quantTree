@@ -27,7 +27,7 @@ def compute_roto_translation(gauss0, target_sKL=1):
         num_angles = 1
         P = 1
     else:
-        num_angles = np.int(np.floor(dim / 2))
+        num_angles = int(np.floor(dim / 2))
         A = np.random.multivariate_normal(np.zeros(dim), np.identity(dim), dim)
         P, _ = np.linalg.qr(A)
 
@@ -100,7 +100,7 @@ def generate_random_rotation(dim):
     if dim == 1:
         Q = 1
     else:
-        num_angles = np.int(np.floor(dim / 2))
+        num_angles = int(np.floor(dim / 2))
 
         angles = np.zeros(num_angles)
         angles[0] = np.random.uniform(0, 2 * np.pi)
@@ -145,7 +145,7 @@ def compute_rotation(gauss0, target_sKL=1, nrun=100, maxiter=1000):
             num_angles = 1
             P = 1
         else:
-            num_angles = np.int(np.floor(dim / 2))
+            num_angles = int(np.floor(dim / 2))
             A = np.random.multivariate_normal(np.zeros(dim), np.identity(dim), dim)
             P, _ = np.linalg.qr(A)
 
