@@ -1,5 +1,5 @@
 # Introduction
-This repository contains the Python implementation of QuantTree \[[Boracchi et al. 2018](#boracchi-et-al-2018)\] and its extensions QT-EWMA \[[Frittoli et al. 2021](#frittoli-et-al-2021)\]\[[Frittoli et al. 2022](#frittoli-et-al-2022)\] and CDM \[[Stucchi et al. 2022](#stucchi-et-al-2022)\].
+This repository contains the Python implementation of QuantTree \[[Boracchi et al. 2018](#boracchi-et-al-2018)\] and its extensions QT-EWMA \[[Frittoli et al. 2021](#frittoli-et-al-2021)\]\[[Frittoli et al. 2022](#frittoli-et-al-2022)\], CDM \[[Stucchi et al. 2022](#stucchi-et-al-2022)\] and Kernel QuantTree \[[Stucchi et. al. 2023](#stucchi-et-al-2023)\].
 
 # Dependencies
 Python 3 with the packages in [requirements.txt](requirements.txt)
@@ -62,7 +62,23 @@ CDM is implemented in `quanttree/cdm_src.py` in a class called `CDM_QT_EWMA`. We
 We remark that the control of the ARL0 holds for any CDM defined by any online change-detection algorithm that can be configured to yield the desired ARL0 by setting a constant false alarm probability over time (see Proposition 1 in \[[Stucchi et al. 2022](#stucchi-et-al-2022)\]). This means that, in principle, we can define CDM using other change-detection tests. However, to the best of our knowledge, QT-EWMA is the only nonparametric and online change-detection test for multivariate datastreams where the ARL0 is controlled by setting a constant false alarm probability.
 
 ## Kernel QuantTree
-Coming soon.
+Kernel QuantTree monitors batches of data to detect any distribution change $\phi_0 \to \phi_1$ affecting the batches. As in QuantTree, during training, a histogram is constructed over a training set. Each bin of the histogram is defined by _i)_ mapping multivariate training data to the univariate space via measurable kernel functions and _ii)_ computing a quantile of the projected samples to isolate the pre-defined percentage of points that fall in the bin. In contrast with QuantTree, the bins of Kernel QuantTree are compact subsets of the input space with finite volume. The detection threshold is computed via Monte Carlo simulations, as described in \[[Boracchi et al. 2018](#boracchi-et-al-2018)\] and \[[Frittoli et al. 2022](#frittoli-et-al-2022)\]. During testing, a batch is mapped to a bin-probability vector by counting the number of batch samples falling in each bin. Then, the test statistic associated with the batch only depends on its bin-probability vector. A change is detected when the test statistic exceeds the threshold.
+
+The main parameters of Kernel QuantTree are:
+
+- the kernel functions $f_k$ to be employed;
+- the number of bins $K$;
+- the desired percentage of points per bin $\{\pi_1, ..., \pi_K\}$;
+- the target False Positive Rate $\alpha$;
+- the test statistic to be employed.
+
+The Kernel QuantTree is implemented in the following files:
+
+- `quanttree/kqt_eucliean.py` in a class called `EuclideanKernelQuantTree`;
+- `quanttree/kqt_mahalanobis.py` in a class called `MahalanobisKernelQuantTree`;
+- `quanttree/kqt_weighted_mahalanobis.py` in a class called `WeightedMahalanobisKernelQuantTree`;
+
+We refer to the inline documentation of each class for a detailed explanation of the `__init__` arguments. In `demos/demo_kqt.py`, you can see the proposed Kernel QuantTrees in action (with comments!).
 
 ## MultiModal QuantTree
 Coming soon.
